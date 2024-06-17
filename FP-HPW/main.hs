@@ -60,6 +60,9 @@ addToSet value set x = value == x || set x
 deleteFromSet :: Int -> IntSet -> IntSet
 deleteFromSet value set x = set x && value /= x
 
+equalIntSet :: IntSet -> IntSet -> Int -> Bool
+equalIntSet a b x = a x == b x
+
 problem2 = do 
     print "Problem 2"
     print "Part A."
@@ -87,6 +90,10 @@ problem2 = do
     print "Set generation: "
     print $ "addToSet 4 [0;3]: " ++ show(addToSet 4 (interval 0 3) 4)
     print $ "deleteFromSet 4 [0;4]: " ++ show(deleteFromSet 4 (interval 0 4) 4)
+    putStrLn ""
+    print "Part E."
+    print $ "equalIntSet allInts allInts: " ++ show(equalIntSet allInts allInts 1)
+    print $ "equalIntSet emptySet allInts: " ++ show(equalIntSet emptySet allInts 1)
     putStrLn ""
 
 main = do

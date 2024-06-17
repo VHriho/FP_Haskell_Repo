@@ -26,7 +26,7 @@ class IDict d k v where
     maybeGet     :: k -> d k v -> Maybe v
     -- getOrDefault :: k -> d k v -> v -> v
     contains     :: k -> d k v -> Bool
-    -- delete       :: k -> d k v -> d k v
+    delete       :: k -> d k v -> d k v
     -- elems        :: d k v -> [v]
     keys         :: d k v -> [k]
     -- size         :: d k v -> Int
@@ -51,6 +51,12 @@ instance IDict Dict Int Char where
     contains :: Int -> Dict Int Char -> Bool
     contains k (Dict dict) = k `elem` keys (Dict dict)
 
+    delete :: Int -> Dict Int Char -> Dict Int Char
+    delete k (Dict dict) = Dict (foldr helpDel [] [dict]) where
+        helpDel [] ys = []
+        helpDel ((x, y):xs) ys| k == x = helpDel xs ys
+                              | otherwise = (x,y) : helpDel xs ys
+
     keys :: Dict Int Char -> [Int]
     keys (Dict dict) = helpKeys dict where
         helpKeys [] = []
@@ -73,6 +79,9 @@ main = do
     print "Test contains"
     print $ contains 2 (fromPairs kvPairs )
     print $ contains 7 (fromPairs kvPairs )
+    print "Test delete"
+    print $ fromPairs kvPairs
+    print $ delete 1 (fromPairs kvPairs)
     print "Test keys"
     print $ keys (fromPairs kvPairs)
     where 

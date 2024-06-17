@@ -27,7 +27,7 @@ class IDict d k v where
     -- getOrDefault :: k -> d k v -> v -> v
     contains     :: k -> d k v -> Bool
     delete       :: k -> d k v -> d k v
-    -- elems        :: d k v -> [v]
+    elems        :: d k v -> [v]
     keys         :: d k v -> [k]
     -- size         :: d k v -> Int
     empty        :: d k v 
@@ -57,6 +57,11 @@ instance IDict Dict Int Char where
         helpDel ((x, y):xs) ys| k == x = helpDel xs ys
                               | otherwise = (x,y) : helpDel xs ys
 
+    elems :: Dict Int Char -> [Char]
+    elems (Dict dict) = helpElems dict where 
+        helpElems [] = []
+        helpElems ((k, v):vs) = v : helpElems vs
+
     keys :: Dict Int Char -> [Int]
     keys (Dict dict) = helpKeys dict where
         helpKeys [] = []
@@ -82,6 +87,8 @@ main = do
     print "Test delete"
     print $ fromPairs kvPairs
     print $ delete 1 (fromPairs kvPairs)
+    print "Test elems"
+    print $ elems (fromPairs kvPairs)
     print "Test keys"
     print $ keys (fromPairs kvPairs)
     where 

@@ -35,6 +35,14 @@ interval lBound uBound x
     |lBound == uBound = lBound == x
     |otherwise        = (uBound <= x) && (x <= lBound)
 
+coIntegers :: Int -> IntSet
+coIntegers k b = helpСoIntegers k b == 1 
+    where
+        helpСoIntegers k 0 = k
+        helpСoIntegers 0 b = b
+        helpСoIntegers k b  | k > b     = helpСoIntegers (k-b) b
+                            | otherwise = helpСoIntegers k (b-k)
+
 problem2 = do 
     print "Problem 2"
     print "Part A."
@@ -45,6 +53,11 @@ problem2 = do
     print "interval lBound uBound x: " 
     print $ "[0;1] 2: " ++ show(interval 0 1 2)
     print $ "[0;2] 1: " ++ show(interval 0 2 1)
+    putStrLn ""
+    print "Part C."
+    print "Coprime integers: "
+    print $ "Coprime 2 1: " ++ show(coIntegers 2 1)
+    print $ "Coprime 4 2: " ++ show(coIntegers 4 2)
     putStrLn ""
 
 main = do

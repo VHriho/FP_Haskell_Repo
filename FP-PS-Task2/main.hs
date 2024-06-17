@@ -23,7 +23,7 @@ empty        :: Dict k v
 --    d denotes the actual type of the dictionary (its type constructor)   
 class IDict d k v where
     insert       :: k -> v -> d k v -> d k v
-    -- maybeGet     :: k -> d k v -> Maybe v
+    maybeGet     :: k -> d k v -> Maybe v
     -- getOrDefault :: k -> d k v -> v -> v
     -- contains     :: k -> d k v -> Bool
     -- delete       :: k -> d k v -> d k v
@@ -40,7 +40,13 @@ instance IDict Dict Int Char where
     insert k v (Dict dict) = Dict (helpInsert k v dict) where 
         helpInsert k v [] = [(k, v)]
         helpInsert k v ((x, y):xs)| k == x    = (k, v) : xs 
-                                | otherwise = (x, y) : helpInsert k v xs
+                                  | otherwise = (x, y) : helpInsert k v xs
+
+    maybeGet :: Int -> Dict Int Char -> Maybe Char
+    maybeGet k (Dict dict) = helpMaybeGet k dict where
+        helpMaybeGet k [] = Nothing
+        helpMaybeGet k ((x, y):xs)| k == x    = Just y
+                                  | otherwise = helpMaybeGet k xs
 
     empty :: Dict Int Char
     empty = Dict []
@@ -53,7 +59,9 @@ instance (Show k, Show v) => Show (Dict k v) where
     show (Dict ((k, v):xs)) = "{" ++ show k ++ " : " ++ show v ++ "} " ++ show (Dict xs)
 
 main = do
-    print $ fromPairs kvPairs 
+    print "Test maybeGet"
+    print $ maybeGet 1 (fromPairs kvPairs)
+    print $ maybeGet 6 (fromPairs kvPairs)
     where 
         kvPairs   = [(1,'h'), (2,'e'), (3, 'l'), (4,'l'), (5, 'o')] :: [(Int, Char)]
         -- kvPairs   = [(1,'h')] :: [(Int, Char)]

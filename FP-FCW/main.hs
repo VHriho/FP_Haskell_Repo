@@ -67,6 +67,7 @@ problem3 = do
     print "Problem 3"
     print $ wordify "There is 10 words"
 
+
 -- Problem 4.
 data Figure = Circle (Float, Float) Float | Square (Float, Float) Float | Triangle (Float, Float) (Float, Float) (Float, Float) 
 
@@ -84,8 +85,27 @@ problem4 = do
     print $ area (Square (0, 0) 10)
     print $ area (Triangle (0, 0) (5, 5) (0, 10))
 
+
+-- Problem 5.
+data Tree a = Node a (Tree a) (Tree a) | Empty deriving (Show)
+
+tree = Node 8 (Node 3 (Node 1 Empty Empty) (Node 6 (Node 4 Empty Empty) (Node 7 Empty Empty))) (Node 10 Empty (Node 14 (Node 13 Empty Empty) Empty))
+
+search :: Tree a -> [a]
+search tree = helpSearch [tree]
+    where 
+        helpSearch [] = []
+        helpSearch (Empty : xs) = helpSearch xs
+        helpSearch (Node value left right : xs) = value : helpSearch ([left, right] ++ xs)
+
+problem5 = do
+    print "Problem 5"
+    print tree
+    print $ search tree
+
 main = do
     problem1
     problem2
     problem3
     problem4
+    problem5

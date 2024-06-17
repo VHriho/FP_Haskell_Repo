@@ -15,5 +15,26 @@ problem1 = do
     print $ "Result: " ++ show (newton_iter (\x -> x**3 - 328*x**2 - 1999*x - 1670) (diff (\ x -> x ** 3 - 328 * x ** 2 - 1999 * x - 1670) 0.01) 100 100)
     putStrLn ""
 
+
+-- Problem 2.
+
+type IntSet = (Int -> Bool)
+
+isMember :: IntSet -> Int -> Bool
+isMember f x = f x
+
+emptySet :: IntSet
+emptySet x = False
+allInts :: IntSet
+allInts x = True
+
+problem2 = do 
+    print "Problem 2"
+    print "Part A."
+    print $ "emptySet x: " ++ show(emptySet 0)
+    print $ "allInts x: " ++ show(allInts 1)
+    putStrLn ""
+
 main = do
     problem1
+    problem2

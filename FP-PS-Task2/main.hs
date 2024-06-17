@@ -29,7 +29,7 @@ class IDict d k v where
     delete       :: k -> d k v -> d k v
     elems        :: d k v -> [v]
     keys         :: d k v -> [k]
-    -- size         :: d k v -> Int
+    size         :: d k v -> Int
     empty        :: d k v 
 
 -- 2. Propose a naive implementation of the typeclass above 
@@ -67,6 +67,9 @@ instance IDict Dict Int Char where
         helpKeys [] = []
         helpKeys ((k, v):ks) = k : helpKeys ks
 
+    size :: Dict Int Char -> Int
+    size (Dict dict) = length dict
+
     empty :: Dict Int Char
     empty = Dict []
 
@@ -91,6 +94,8 @@ main = do
     print $ elems (fromPairs kvPairs)
     print "Test keys"
     print $ keys (fromPairs kvPairs)
+    print "Test size"
+    print $ size (fromPairs kvPairs)
     where 
         kvPairs   = [(1,'h'), (2,'e'), (3, 'l'), (4,'l'), (5, 'o')] :: [(Int, Char)]
         -- kvPairs   = [(1,'h')] :: [(Int, Char)]

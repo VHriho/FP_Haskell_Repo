@@ -103,9 +103,26 @@ problem5 = do
     print tree
     print $ search tree
 
+
+-- Problem 6.
+minDist lst = minimum (lstOfDist (myIter lst))
+    where
+        dist (x0, y0) (x1, y1) = sqrt ((x1 - x0)^2 + (y1 - y0)^2)
+        lstOfDist [] = []
+        lstOfDist (x:xs) = dist x (head xs) : lstOfDist (tail xs)
+        myIter [] = []
+        myIter (x:xs) = helpIter x xs ++ myIter xs
+        helpIter elem [] = []
+        helpIter elem (x:xs) = [elem, x] ++ helpIter elem xs
+
+problem6 = do
+    print "Problem 6"
+    print $ minDist [(0,1), (2,3), (4,5), (6,7)]
+
 main = do
     problem1
     problem2
     problem3
     problem4
     problem5
+    problem6

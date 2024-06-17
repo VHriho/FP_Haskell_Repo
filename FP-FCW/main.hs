@@ -67,7 +67,25 @@ problem3 = do
     print "Problem 3"
     print $ wordify "There is 10 words"
 
+-- Problem 4.
+data Figure = Circle (Float, Float) Float | Square (Float, Float) Float | Triangle (Float, Float) (Float, Float) (Float, Float) 
+
+class Area a where
+    area :: a -> Float
+
+instance Area Figure where 
+    area (Circle _ r) = pi * r ** 2
+    area (Square _ side) = side ** 2
+    area (Triangle (x0, y0) (x1, y1) (x2, y2)) = 0.5 * abs ((x0-x2)*(y1-y2) - (x1-x2)*(y0-y2))
+
+problem4 = do
+    print "Problem 4"
+    print $ area (Circle (0, 0) 10)
+    print $ area (Square (0, 0) 10)
+    print $ area (Triangle (0, 0) (5, 5) (0, 10))
+
 main = do
     problem1
     problem2
     problem3
+    problem4

@@ -45,6 +45,29 @@ problem2 = do
     let hlist = List [Atom 1, List [Atom 2, Atom 3], Atom 4]
     print $ splitInMidle hlist
 
+
+-- Problem 3.
+wordify :: String -> String 
+wordify xs = foldr step [] xs where 
+    step xs ys  | xs == '1' = "one" ++ " " ++ ys
+                | xs == ' ' && head ys == ' ' = ys
+                | xs == ' ' && head ys /= ' ' = " " ++ ys
+                | xs == '2' = "two " ++ ys
+                | xs == '3' = "three" ++ ys
+                | xs == '4' = "four "  ++ ys
+                | xs == '5' = "five " ++ ys
+                | xs == '6' = "six " ++ ys
+                | xs == '7' = "seven " ++ ys
+                | xs == '8' = "eight " ++ ys
+                | xs == '9' = "nine " ++ ys
+                | xs == '0' = "zero " ++ ys
+                | otherwise = xs : wordify ys
+
+problem3 = do
+    print "Problem 3"
+    print $ wordify "There is 10 words"
+
 main = do
     problem1
     problem2
+    problem3

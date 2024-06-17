@@ -25,7 +25,7 @@ class IDict d k v where
     insert       :: k -> v -> d k v -> d k v
     maybeGet     :: k -> d k v -> Maybe v
     -- getOrDefault :: k -> d k v -> v -> v
-    -- contains     :: k -> d k v -> Bool
+    contains     :: k -> d k v -> Bool
     -- delete       :: k -> d k v -> d k v
     -- elems        :: d k v -> [v]
     keys         :: d k v -> [k]
@@ -48,6 +48,9 @@ instance IDict Dict Int Char where
         helpMaybeGet k ((x, y):xs)| k == x    = Just y
                                   | otherwise = helpMaybeGet k xs
 
+    contains :: Int -> Dict Int Char -> Bool
+    contains k (Dict dict) = k `elem` keys (Dict dict)
+
     keys :: Dict Int Char -> [Int]
     keys (Dict dict) = helpKeys dict where
         helpKeys [] = []
@@ -67,6 +70,9 @@ main = do
     print "Test maybeGet"
     print $ maybeGet 1 (fromPairs kvPairs)
     print $ maybeGet 6 (fromPairs kvPairs)
+    print "Test contains"
+    print $ contains 2 (fromPairs kvPairs )
+    print $ contains 7 (fromPairs kvPairs )
     print "Test keys"
     print $ keys (fromPairs kvPairs)
     where 

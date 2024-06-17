@@ -45,5 +45,18 @@ instance IDict Dict Int Char where
     empty :: Dict Int Char
     empty = Dict []
 
+-- 3. Implement the Show typeclass to represent your dictionary 
+--    in the form {key : value} 
+instance (Show k, Show v) => Show (Dict k v) where
+    show :: Dict k v -> String
+    show (Dict []) = ""
+    show (Dict ((k, v):xs)) = "{" ++ show k ++ " : " ++ show v ++ "} " ++ show (Dict xs)
+
 main = do
-    print "naive implementation of the typeclass"
+    print $ fromPairs kvPairs 
+    where 
+        kvPairs   = [(1,'h'), (2,'e'), (3, 'l'), (4,'l'), (5, 'o')] :: [(Int, Char)]
+        -- kvPairs   = [(1,'h')] :: [(Int, Char)]
+        -- kvPairs   = [] :: [(Int, Char)]
+        fromPairs = foldl insert' (empty :: Dict Int Char)
+        insert' dict (k, v) = insert k v dict

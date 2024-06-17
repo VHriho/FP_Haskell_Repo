@@ -28,11 +28,23 @@ emptySet x = False
 allInts :: IntSet
 allInts x = True
 
+-- interval x y contains all the integers in [x;y]
+interval :: Int -> Int -> IntSet
+interval lBound uBound x
+    |lBound < uBound  = (lBound <= x) && (x <= uBound)
+    |lBound == uBound = lBound == x
+    |otherwise        = (uBound <= x) && (x <= lBound)
+
 problem2 = do 
     print "Problem 2"
     print "Part A."
     print $ "emptySet x: " ++ show(emptySet 0)
     print $ "allInts x: " ++ show(allInts 1)
+    putStrLn ""
+    print "Part B."
+    print "interval lBound uBound x: " 
+    print $ "[0;1] 2: " ++ show(interval 0 1 2)
+    print $ "[0;2] 1: " ++ show(interval 0 2 1)
     putStrLn ""
 
 main = do

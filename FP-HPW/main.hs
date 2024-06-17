@@ -43,6 +43,23 @@ coIntegers k b = helpСoIntegers k b == 1
         helpСoIntegers k b  | k > b     = helpСoIntegers (k-b) b
                             | otherwise = helpСoIntegers k (b-k)
 
+-- Boolean Operators
+setIntersection :: IntSet -> IntSet -> IntSet
+setIntersection a b x = a x && b x 
+
+setUnion :: IntSet -> IntSet -> IntSet
+setUnion a b x = a x || b x
+
+setComplement :: IntSet -> IntSet -> IntSet
+setComplement a b x = a x && not (b x)
+
+-- Set generation
+addToSet :: Int -> IntSet -> IntSet
+addToSet value set x = value == x || set x
+
+deleteFromSet :: Int -> IntSet -> IntSet
+deleteFromSet value set x = set x && value /= x
+
 problem2 = do 
     print "Problem 2"
     print "Part A."
@@ -58,6 +75,18 @@ problem2 = do
     print "Coprime integers: "
     print $ "Coprime 2 1: " ++ show(coIntegers 2 1)
     print $ "Coprime 4 2: " ++ show(coIntegers 4 2)
+    putStrLn ""
+    print "Part D."
+    print "Boolean Operators: "
+    print $ "setIntersection [0;2] [1;3] 1: " ++ show(setIntersection (interval 0 2) (interval 1 3) 1)
+    print $ "setIntersection [0;2] [4;5] 3: " ++ show(setIntersection (interval 0 2) (interval 4 5) 3)
+    print $ "setUnion [0;3] [3;4] 2: " ++ show(setUnion (interval 0 3) (interval 3 4) 2)
+    print $ "setUnion [0;2] [4;5] 3: " ++ show(setUnion (interval 0 2) (interval 4 5) 3)
+    print $ "setComplement [0;1] [0;5] 2: " ++ show(setComplement (interval 0 1) (interval 0 5) 2)
+    print $ "setComplement allInts [0;1] 2: " ++ show(setComplement allInts (interval 0 1) 2)
+    print "Set generation: "
+    print $ "addToSet 4 [0;3]: " ++ show(addToSet 4 (interval 0 3) 4)
+    print $ "deleteFromSet 4 [0;4]: " ++ show(deleteFromSet 4 (interval 0 4) 4)
     putStrLn ""
 
 main = do

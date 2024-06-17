@@ -96,6 +96,57 @@ problem2 = do
     print $ "equalIntSet emptySet allInts: " ++ show(equalIntSet emptySet allInts 1)
     putStrLn ""
 
+-- Problem 3.
+
+type Stack = String
+
+isOperator :: String -> Bool
+isOperator x = elem x ["+", "-", "*", "/", "%", "^"]
+
+isLeftAssociative :: String -> Bool
+isLeftAssociative x = elem x ["+", "-", "*", "/", "%"]
+
+isLeftParenthesis :: String -> Bool
+isLeftParenthesis x = x == "("
+
+isRightParenthesis :: String -> Bool
+isRightParenthesis x = x == ")"
+
+priority :: String -> Int
+priority x  | x == "+" = 1
+            | x == "-" = 1
+            | x == "*" = 2
+            | x == "/" = 2
+            | x == "^" = 3
+            | x == "%" = 4 
+
+parse :: String -> Stack
+parse expr = helpParse (words expr) [] [] 
+    where
+        helpParse [] [] output = unwords (reverse output)
+        helpParse [] stackOfOperators output
+            | isLeftParenthesis (head stackOfOperators) = error "Incorrect brackets"
+            | otherwise = helpParse [] (tail stackOfOperators) (head stackOfOperators : output)
+        helpParse input stackOfOperators output
+            | isLeftParenthesis  (head input) = helpParse (tail input) (head input : stackOfOperators) output
+            | isRightParenthesis (head input) && null stackOfOperators = error "Incorrect brackets"
+            | isRightParenthesis (head input) && isLeftParenthesis (head stackOfOperators) = helpParse (tail input) (tail stackOfOperators) output
+            | isRightParenthesis (head input) = helpParse input (tail stackOfOperators) (head stackOfOperators : output)
+            | isOperator (head input) && null stackOfOperators = helpParse (tail input) (head input : stackOfOperators) output
+            | isOperator (head input) = if not (isLeftParenthesis (head stackOfOperators)) && (priority (head stackOfOperators) >= priority (head input) && isLeftAssociative (head input))
+                then helpParse input (tail stackOfOperators) (head stackOfOperators : output)
+                else helpParse (tail input) (head input : stackOfOperators) output
+            | otherwise = helpParse (tail input) stackOfOperators (head input : output)
+
+problem3 = do 
+    print "Problem 3."
+    print "Part A."
+    print $ "Parse 10 * 2 ^ ( 3 - 1 ) * 3.5 to RPN: " ++ parse "10 * 2 ^ ( 3 - 1 ) * 3.5" -- 10 2 3 1 - ^ * 3.5 *
+    print $ "Parse ( 10 / ( 2 % 2 ) ) + 1 to RPN: " ++ parse "( 10 / ( 2 % 2 ) ) + 1" -- 10 2 2 % / 1 +
+    print $ "Parse ( 2 + 2 ) + ( 3 ^ 2 % 2 ) to RPN: " ++ parse "( 2 + 2 ) + ( 3 ^ 2 % 2 )" -- 2 2 + 3 2 2 % ^ +
+    putStrLn ""
+
 main = do
     problem1
     problem2
+    problem3

@@ -80,6 +80,19 @@ instance (Show k, Show v) => Show (Dict k v) where
     show (Dict []) = ""
     show (Dict ((k, v):xs)) = "{" ++ show k ++ " : " ++ show v ++ "} " ++ show (Dict xs)
 
+{- OPTIONAL
+-- 4. Implement the Fucntor typeclass
+--    that alows mapping over dictionary
+--    Uncomment this block, if you do this
+-}
+
+instance Functor (Dict k) where
+  fmap :: (v -> p) -> Dict k v -> Dict k p
+  fmap f (Dict []) = Dict []
+  fmap f (Dict ((k, v):vs)) = Dict ((k, f v) : helpFmap) 
+    where 
+        Dict helpFmap = fmap f (Dict vs)
+
 main = do
     print "Test maybeGet"
     print $ maybeGet 1 (fromPairs kvPairs)

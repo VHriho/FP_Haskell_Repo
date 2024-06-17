@@ -48,7 +48,55 @@ problem2 = do
     print $ findMaxFrequency "some sentence" -- ('e', 4)
     -- print $ findMaxFrequency ([] :: String)  -- error
 
+{- PROBLEM 3
+For a given system of types that represent a file system structure
+write a function search that given a name returns a list of all paths
+that correspond to that name.
+-}
+
+type Name   = String
+type Path   = String
+data FSNode = File Name | Dir Name [FSNode]
+
+search :: Name -> FSNode -> [Path]
+search name root = searching name root [] 
+    where 
+        searching name (File fileName) path 
+            | fileName == name = [path ++ fileName]
+            | otherwise = []
+        searching name (Dir dirName (x:xs)) path 
+            | dirName == name = [path ++ dirName ++ "/"] ++ searching name x (path ++ dirName ++ "/") ++ searching name (Dir dirName xs) path
+            | otherwise = searching name x (path ++ dirName ++ "/") ++ searching name (Dir dirName xs) path
+        searching name (Dir _ []) path = []
+
+root = Dir "/"
+  [
+    Dir "folder1" 
+    [
+      File "file1",
+      Dir  "folder2" 
+      [
+        File "file2",
+        File "file3"
+      ],
+      Dir  "folder3" 
+      [
+        File "file3",
+        File "file4"
+      ],
+      File "file5"
+    ]
+  ]
+
+problem3 = do
+    print "Problem 3"
+    print $ search "file1" root -- ["//folder1/file1"]
+    print $ search "file3" root -- ["//folder1/folder2/file3", "//folder1/folder3/file3"]
+    print $ search "file4" root -- ["//folder1/folder3/file4"]
+    print $ search "file6" root -- []
+
 main = do
     problem1
-    problem2    
+    problem2
+    problem3    
 

@@ -119,6 +119,31 @@ problem6 = do
     print "Problem 6"
     print $ minDist [(0,1), (2,3), (4,5), (6,7)]
 
+
+-- Problem 7.
+{-
+class Monad m where
+    return :: a -> m a
+    (>>=)  :: m a -> (a -> m b) -> m b
+
+instance Monad Maybe where
+    return :: a -> Maybe a
+    return = Just
+
+    (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b
+    (>>=) Nothing _  = Nothing
+    (>>=) (Just x) f = f x
+
+-- return x >>= f  === f x -- 1. Одиничне перетворення зліва
+-- m >>= return    === m   -- 2. Одиничне перетворення справа
+-- (m >>= f) >>= g === m >>= (\x -> f x >>= g) -- 3. Асоціативність
+-- -}
+
+problem7 = do
+    print $ return 3 >>= (\x -> Just (x+1))
+    print $ Just 3 >>= return
+    print $ (Just 3 >>= (\x -> Just (x+1))) >>= (\x -> Just (x-1))
+
 main = do
     problem1
     problem2
@@ -126,3 +151,4 @@ main = do
     problem4
     problem5
     problem6
+    problem7

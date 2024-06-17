@@ -1,3 +1,5 @@
+import Data.Fixed
+
 -- Problem 1.
 
 diff f dx x = (f (x+dx) - f x) / dx
@@ -138,6 +140,16 @@ parse expr = helpParse (words expr) [] []
                 else helpParse (tail input) (head input : stackOfOperators) output
             | otherwise = helpParse (tail input) stackOfOperators (head input : output)
 
+eval expr = head (foldl step [] (words expr))
+    where   
+        step (x:y:ys) "*" = (x * y)  :ys
+        step (x:y:ys) "+" = (x + y)  :ys
+        step (x:y:ys) "-" = (y - x)  :ys
+        step (x:y:ys) "/" = (y / x)  :ys
+        step (x:y:ys) "^" = (y ** x) :ys
+        step (x:y:ys) "%" = mod' x y : ys
+        step xs number = read number:xs
+
 problem3 = do 
     print "Problem 3."
     print "Part A."
@@ -145,6 +157,10 @@ problem3 = do
     print $ "Parse ( 10 / ( 2 % 2 ) ) + 1 to RPN: " ++ parse "( 10 / ( 2 % 2 ) ) + 1" -- 10 2 2 % / 1 +
     print $ "Parse ( 2 + 2 ) + ( 3 ^ 2 % 2 ) to RPN: " ++ parse "( 2 + 2 ) + ( 3 ^ 2 % 2 )" -- 2 2 + 3 2 2 % ^ +
     putStrLn ""
+    print "Part B."
+    print $ "Eval RPN: " ++ parse "10 * 2 ^ ( 3 - 1 ) * 3.5" ++ "  = " ++ show(eval (parse "10 * 2 ^ ( 3 - 1 ) * 3.5"))
+    print $ "Eval RPN: " ++ parse "( 10 / ( 2 % 2 ) ) + 1" ++ "        = " ++ show (eval (parse "( 10 / ( 2 % 2 ) ) + 1"))
+    print $ "Eval RPN: " ++ parse "( 2 + 2 ) + ( 3 ^ 2 % 2 )" ++ "     = " ++ show(eval (parse "( 2 + 2 ) + ( 3 ^ 2 % 2 )"))
 
 main = do
     problem1
